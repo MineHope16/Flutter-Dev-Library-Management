@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../Models/FavouriteBookModel.dart';
 import '../Elements/CustomText.dart';
+import 'BookDetailsScreen.dart';
 import '../CommonWidgets/ThemeToggleWidget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -119,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           ThemeToggleWidget(
-            style: ThemeToggleStyle.iconButton, 
+            style: ThemeToggleStyle.iconButton,
             iconSize: 26,
             activeColor: theme.colorScheme.primary,
           ),
@@ -353,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             MyContainer(
               color: theme.colorScheme.surface.withOpacity(
-                themeProvider.isDarkMode ? 0.7 : 0.5
+                themeProvider.isDarkMode ? 0.7 : 0.5,
               ),
               width: double.infinity,
               height: double.infinity,
@@ -423,7 +424,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     // Featured Books Section
                     _buildSectionHeader("Featured Books", () {
-                      Navigator.pushNamed(context, AppRoutes.search);
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.search,
+                        arguments: 'popular books',
+                      );
                     }),
 
                     const SizedBox(height: 15),
@@ -486,8 +491,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: CircularProgressIndicator(
-          color: theme.colorScheme.primary, 
-          strokeWidth: 2
+          color: theme.colorScheme.primary,
+          strokeWidth: 2,
         ),
       ),
     );
@@ -607,11 +612,12 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: GestureDetector(
               onTap: () {
-                // Navigate to book details or search for this book
-                Navigator.pushNamed(
+                // Navigate to book details screen
+                Navigator.push(
                   context,
-                  AppRoutes.search,
-                  arguments: book.displayTitle,
+                  MaterialPageRoute(
+                    builder: (context) => BookDetailsScreen(book: book),
+                  ),
                 );
               },
               child: Container(

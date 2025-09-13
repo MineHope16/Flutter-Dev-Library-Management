@@ -8,6 +8,7 @@ import '../../utils/AppStrings.dart';
 import '../Elements/CustomContainer.dart';
 import '../Elements/CustomText.dart';
 import '../Elements/CustomTextField.dart';
+import 'BookDetailsScreen.dart';
 
 enum SearchFilter { all, title, author, isbn }
 
@@ -373,103 +374,114 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildBookCard(BookModel book, ThemeProvider themeProvider) {
-    return Card(
-      margin: EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Container(
-        padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: themeProvider.buttonBackgroundColor,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Book Cover
-            Container(
-              width: 60,
-              height: 90,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.grey[300],
+    return GestureDetector(
+      onTap: () {
+        // Navigate to book details screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BookDetailsScreen(book: book),
+          ),
+        );
+      },
+      child: Card(
+        margin: EdgeInsets.only(bottom: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Container(
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: themeProvider.buttonBackgroundColor,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Book Cover
+              Container(
+                width: 60,
+                height: 90,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.grey[300],
+                ),
+                child: book.coverId != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          _apiService.getCoverUrl(book.coverId),
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return _buildPlaceholderCover();
+                          },
+                        ),
+                      )
+                    : _buildPlaceholderCover(),
               ),
-              child: book.coverId != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        _apiService.getCoverUrl(book.coverId),
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return _buildPlaceholderCover();
-                        },
-                      ),
-                    )
-                  : _buildPlaceholderCover(),
-            ),
 
-            SizedBox(width: 12),
+              SizedBox(width: 12),
 
-            // Book Details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MyText(
-                    text: book.displayTitle,
-                    size: 16,
-                    fontWeight: FontWeight.bold,
-                    color: themeProvider.primaryTextColor,
-                    maxLines: 2,
-                  ),
-                  SizedBox(height: 4),
-                  MyText(
-                    text: "${AppStrings.by} ${book.authorNames}",
-                    size: 14,
-                    color: themeProvider.secondaryTextColor,
-                    maxLines: 1,
-                  ),
-                  if (book.displayYear.isNotEmpty) ...[
+              // Book Details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    MyText(
+                      text: book.displayTitle,
+                      size: 16,
+                      fontWeight: FontWeight.bold,
+                      color: themeProvider.primaryTextColor,
+                      maxLines: 2,
+                    ),
                     SizedBox(height: 4),
                     MyText(
-                      text: "${AppStrings.published}: ${book.displayYear}",
-                      size: 12,
+                      text: "${AppStrings.by} ${book.authorNames}",
+                      size: 14,
                       color: themeProvider.secondaryTextColor,
+                      maxLines: 1,
                     ),
-                  ],
-                  if (book.subjects != null && book.subjects!.isNotEmpty) ...[
-                    SizedBox(height: 8),
-                    Wrap(
-                      spacing: 4,
-                      runSpacing: 4,
-                      children: book.subjects!.take(3).map((subject) {
-                        return Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Colors.blue.withOpacity(0.3),
+                    if (book.displayYear.isNotEmpty) ...[
+                      SizedBox(height: 4),
+                      MyText(
+                        text: "${AppStrings.published}: ${book.displayYear}",
+                        size: 12,
+                        color: themeProvider.secondaryTextColor,
+                      ),
+                    ],
+                    if (book.subjects != null && book.subjects!.isNotEmpty) ...[
+                      SizedBox(height: 8),
+                      Wrap(
+                        spacing: 4,
+                        runSpacing: 4,
+                        children: book.subjects!.take(3).map((subject) {
+                          return Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
                             ),
-                          ),
-                          child: Text(
-                            subject,
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.blue,
-                              fontWeight: FontWeight.w500,
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.blue.withOpacity(0.3),
+                              ),
                             ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
+                            child: Text(
+                              subject,
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.blue,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
