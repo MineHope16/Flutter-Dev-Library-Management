@@ -67,7 +67,6 @@ class MyTextField extends StatefulWidget {
   final Color? suffixColor;
   final double? labelSize;
 
-
   const MyTextField({
     super.key,
     this.btnLabel,
@@ -133,7 +132,7 @@ class MyTextField extends StatefulWidget {
     this.passwordIconColor,
     this.suffixColor,
     this.labelColor,
-    this.labelSize
+    this.labelSize,
   });
 
   @override
@@ -151,6 +150,9 @@ class _MyTextFieldState extends State<MyTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     return Padding(
       padding: EdgeInsets.only(
         left: widget.paddingLeft ?? 0,
@@ -164,15 +166,22 @@ class _MyTextFieldState extends State<MyTextField> {
         // fixed height
         margin: widget.containerMargin,
         padding:
-            widget.containerPadding ?? const EdgeInsets.symmetric(horizontal: 14),
+            widget.containerPadding ??
+            const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
           borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
-          color: widget.backgroundColor ?? Colors.white,
-          border:
-              widget.removeBorder
-                  ? null
-                  : (widget.textFieldBorder ??
-                      Border.all(color: const Color(0xFF909090), width: 0.5)),
+          color:
+              widget.backgroundColor ??
+              (isDarkMode ? const Color(0xFF2C2C2C) : Colors.white),
+          border: widget.removeBorder
+              ? null
+              : (widget.textFieldBorder ??
+                    Border.all(
+                      color: isDarkMode
+                          ? const Color(0xFF555555)
+                          : const Color(0xFF909090),
+                      width: 0.5,
+                    )),
         ),
         child: Center(
           child: TextFormField(
@@ -194,7 +203,7 @@ class _MyTextFieldState extends State<MyTextField> {
             maxLines: widget.maxLines ?? 1,
             minLines: widget.minLines ?? 1,
             validator: widget.validator,
-            cursorColor: widget.cursorColor ?? Colors.black,
+            cursorColor: widget.cursorColor ?? theme.colorScheme.primary,
             decoration:
                 widget.decoration ??
                 InputDecoration(
@@ -202,72 +211,79 @@ class _MyTextFieldState extends State<MyTextField> {
                   labelText: widget.labelText,
                   labelStyle: TextStyle(
                     fontFamily: 'Poppins',
-                    color: widget.labelColor ?? Colors.black,
+                    color: widget.labelColor ?? theme.colorScheme.onSurface,
                     fontSize: widget.labelSize ?? 20,
                     fontWeight: FontWeight.normal,
                   ),
                   isDense: true,
-                  prefixIcon:
-                      widget.prefixIcon != null ?
-                          Icon(widget.prefixIcon, size: widget.prefixIconSize,) :
-                      widget.prefixIcon == null && widget.icon != null && !widget.isSuffixIcon
-                          ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Image.asset(
-                              widget.icon!,
-                              height: 20,
-                              width: 20,
-                              fit: BoxFit.contain,
-                              color:
-                                  widget.prefixIconColor ??
-                                  const Color(0xff7B7B7B),
-                              errorBuilder:
-                                  (context, error, stackTrace) =>
-                                      const Icon(Icons.error, size: 20),
-                            ),
-                          )
-                          : null,
+                  prefixIcon: widget.prefixIcon != null
+                      ? Icon(widget.prefixIcon, size: widget.prefixIconSize)
+                      : widget.prefixIcon == null &&
+                            widget.icon != null &&
+                            !widget.isSuffixIcon
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Image.asset(
+                            widget.icon!,
+                            height: 20,
+                            width: 20,
+                            fit: BoxFit.contain,
+                            color:
+                                widget.prefixIconColor ??
+                                const Color(0xff7B7B7B),
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.error, size: 20),
+                          ),
+                        )
+                      : null,
                   prefixIconConstraints:
                       widget.prefixIconConstraints ??
                       const BoxConstraints(minWidth: 36, minHeight: 36),
                   suffixStyle: widget.suffixStyle,
-                  suffixIcon:widget.suffixIcon != null ? Icon(widget.suffixIcon, size: 25, color: widget.suffixColor,) : widget.isPasswordField
+                  suffixIcon: widget.suffixIcon != null
+                      ? Icon(
+                          widget.suffixIcon,
+                          size: 25,
+                          color: widget.suffixColor,
+                        )
+                      : widget.isPasswordField
                       ? IconButton(
-                    icon: Icon(
-                      isTextObscured
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: widget.passwordIconColor ?? Colors.black,
-                      size: 25,
-                    ),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(
-                      minWidth: 36,
-                      minHeight: 36,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isTextObscured = !isTextObscured;
-                      });
-                    },
-                  )
+                          icon: Icon(
+                            isTextObscured
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            color:
+                                widget.passwordIconColor ??
+                                theme.colorScheme.onSurface,
+                            size: 25,
+                          ),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(
+                            minWidth: 36,
+                            minHeight: 36,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isTextObscured = !isTextObscured;
+                            });
+                          },
+                        )
                       : widget.isSuffixIcon && widget.icon != null
                       ? GestureDetector(
-                    onTap: widget.onSuffixTap,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Image.asset(
-                        widget.icon!,
-                        height: widget.suffixIconHeight ?? 20,
-                        width: widget.suffixIconWidth ?? 20,
-                        fit: BoxFit.contain,
-                        color: const Color(0xff8697AC),
-                        errorBuilder:
-                            (context, error, stackTrace) =>
-                        const Icon(Icons.error, size: 20),
-                      ),
-                    ),
-                  )
+                          onTap: widget.onSuffixTap,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Image.asset(
+                              widget.icon!,
+                              height: widget.suffixIconHeight ?? 20,
+                              width: widget.suffixIconWidth ?? 20,
+                              fit: BoxFit.contain,
+                              color: const Color(0xff8697AC),
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(Icons.error, size: 20),
+                            ),
+                          ),
+                        )
                       : null,
                   filled: false,
                   hintText: widget.hintText,
@@ -279,7 +295,11 @@ class _MyTextFieldState extends State<MyTextField> {
                       widget.hintStyle ??
                       TextStyle(
                         fontFamily: 'Poppins',
-                        color: widget.hintColor ?? const Color(0xFF909090),
+                        color:
+                            widget.hintColor ??
+                            (isDarkMode
+                                ? const Color(0xFFAAAAAA)
+                                : const Color(0xFF909090)),
                         fontSize: widget.hintSize ?? 14,
                         fontWeight: FontWeight.w500,
                         letterSpacing: 0,
@@ -293,7 +313,7 @@ class _MyTextFieldState extends State<MyTextField> {
             style:
                 widget.inputTextStyle ??
                 TextStyle(
-                  color: widget.textColor ?? Colors.black,
+                  color: widget.textColor ?? theme.colorScheme.onSurface,
                   fontFamily: "Poppins",
                   fontSize: widget.textSize ?? 15,
                   fontWeight: FontWeight.w400,

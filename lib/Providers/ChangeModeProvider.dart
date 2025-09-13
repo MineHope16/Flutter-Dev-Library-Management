@@ -5,7 +5,7 @@ import '../utils/AppTheme.dart';
 
 /// Professional Theme Provider for OpenLibrary Book Explorer
 /// Manages theme state, persistence, and provides comprehensive theming API
-class ThemeProvider extends ChangeNotifier {
+class ThemeProvider extends ChangeNotifier with WidgetsBindingObserver {
   // =============================================================================
   // PRIVATE FIELDS
   // =============================================================================
@@ -27,10 +27,32 @@ class ThemeProvider extends ChangeNotifier {
   ThemeMode get themeMode => _themeMode;
 
   /// Whether current mode is dark theme
-  bool get isDarkMode => _themeMode == ThemeMode.dark;
+  bool get isDarkMode {
+    switch (_themeMode) {
+      case ThemeMode.dark:
+        return true;
+      case ThemeMode.light:
+        return false;
+      case ThemeMode.system:
+        // Check system brightness for system theme mode
+        return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+            Brightness.dark;
+    }
+  }
 
   /// Whether current mode is light theme
-  bool get isLightMode => _themeMode == ThemeMode.light;
+  bool get isLightMode {
+    switch (_themeMode) {
+      case ThemeMode.light:
+        return true;
+      case ThemeMode.dark:
+        return false;
+      case ThemeMode.system:
+        // Check system brightness for system theme mode
+        return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+            Brightness.light;
+    }
+  }
 
   /// Whether current mode follows system theme
   bool get isSystemMode => _themeMode == ThemeMode.system;
@@ -83,10 +105,22 @@ class ThemeProvider extends ChangeNotifier {
     try {
       _prefs = await SharedPreferences.getInstance();
       await _loadThemeMode();
+
+      // Add observer for system brightness changes
+      WidgetsBinding.instance.addObserver(this);
     } catch (e) {
       debugPrint('ThemeProvider: Failed to initialize preferences: $e');
       // Continue with default theme mode
     }
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    // Only notify listeners if we're in system mode
+    if (_themeMode == ThemeMode.system) {
+      notifyListeners();
+    }
+    super.didChangePlatformBrightness();
   }
 
   /// Load theme mode from preferences
@@ -239,9 +273,21 @@ class ThemeProvider extends ChangeNotifier {
     await setThemeMode(ThemeMode.system);
   }
 
+  /// Clear all theme preferences and reset to system default
+  Future<void> clearThemePreferences() async {
+    try {
+      await _prefs?.remove(_themePrefKey);
+      _themeMode = ThemeMode.system;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('ThemeProvider: Failed to clear preferences: $e');
+    }
+  }
+
   @override
   void dispose() {
-    // Clean up any resources if needed
+    // Remove observer for system brightness changes
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 }

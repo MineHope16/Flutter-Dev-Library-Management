@@ -27,7 +27,7 @@ class AuthenticationTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboard ?? TextInputType.text,
       hintText: hintText,
-      hintColor: Colors.blue,
+      hintColor: themeProvider.secondaryTextColor,
       hintSize: 15,
       textColor: themeProvider.primaryTextColor,
       suffixIcon: suffixIcon,
