@@ -42,6 +42,7 @@ dependencies:
   firebase_auth: ^6.0.2 # For Firebase Authentication
   cloud_firestore: ^6.0.1 # For Firebase Data Store
   http: ^1.2.1 # For OpenLibrary API requests
+  shared_preferences: ^2.3.3 # For theme persistence
 
 dev_dependencies:
   flutter_test:

@@ -9,6 +9,7 @@ import '../../utils/AppStrings.dart';
 import '../Elements/CustomContainer.dart';
 import '../Elements/CustomText.dart';
 import '../Elements/CustomBottom.dart';
+import '../CommonWidgets/ThemeToggleWidget.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -154,6 +155,51 @@ class ProfileScreen extends StatelessWidget {
                                       .split(' ')[0] ??
                                   AppStrings.unknown,
                               themeProvider: themeProvider,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Theme Settings Section
+                    MyContainer(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(16),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            MyText(
+                              text: "Theme Settings",
+                              size: 18,
+                              fontWeight: FontWeight.w600,
+                              color: themeProvider.primaryTextColor,
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                MyText(
+                                  text: "Appearance",
+                                  size: 14,
+                                  color: themeProvider.secondaryTextColor,
+                                ),
+                                ThemeToggleWidget(
+                                  style: ThemeToggleStyle.segmentedButton,
+                                  showLabels: false,
+                                  iconSize: 20,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            MyText(
+                              text:
+                                  "Current: ${themeProvider.themeModeDisplayName}",
+                              size: 12,
+                              color: themeProvider.secondaryTextColor,
                             ),
                           ],
                         ),

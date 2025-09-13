@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../Models/FavouriteBookModel.dart';
 import '../Elements/CustomText.dart';
+import '../CommonWidgets/ThemeToggleWidget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -92,28 +93,38 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
       key: _scaffoldKey,
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.black.withOpacity(0.2),
-        elevation: 0, // remove shadow
+        backgroundColor: theme.colorScheme.surface.withOpacity(0.85),
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
         leading: MyIconContainer(
           onTap: () {
             _scaffoldKey.currentState?.openDrawer();
           },
           icon: Icons.menu,
           iconSize: 30,
-          iconColor: Colors.white70,
+          iconColor: theme.colorScheme.onSurface,
         ),
         title: MyText(
           text: AppStrings.appName,
-          color: Colors.white70,
+          color: theme.colorScheme.onSurface,
           fontWeight: FontWeight.bold,
           size: 22,
         ),
+        actions: [
+          ThemeToggleWidget(
+            style: ThemeToggleStyle.iconButton, 
+            iconSize: 26,
+            activeColor: theme.colorScheme.primary,
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       drawer: SizedBox(
         width: MediaQuery.of(context).size.width * 0.6,
@@ -323,14 +334,27 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Stack(
           children: [
+            // Background with theme-aware gradient overlay
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: themeProvider.backgroundColor,
+                ),
+              ),
+            ),
+            // Optional: Keep background image with theme-aware overlay
             Positioned.fill(
               child: Image.asset(
                 "assets/images/background.jpg",
                 fit: BoxFit.cover,
+                color: theme.colorScheme.surface.withOpacity(0.8),
+                colorBlendMode: BlendMode.overlay,
               ),
             ),
             MyContainer(
-              color: Colors.black.withOpacity(0.6),
+              color: theme.colorScheme.surface.withOpacity(
+                themeProvider.isDarkMode ? 0.7 : 0.5
+              ),
               width: double.infinity,
               height: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 20),
@@ -392,7 +416,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 15),
 
                     _isLoading
-                        ? _buildLoadingIndicator()
+                        ? _buildLoadingIndicator(context)
                         : _buildCategoriesGrid(),
 
                     const SizedBox(height: 40),
@@ -405,7 +429,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 15),
 
                     _isLoading
-                        ? _buildLoadingIndicator()
+                        ? _buildLoadingIndicator(context)
                         : _buildFeaturedBooksCarousel(),
 
                     const SizedBox(height: 40),
@@ -456,11 +480,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildLoadingIndicator() {
+  Widget _buildLoadingIndicator(BuildContext context) {
+    final theme = Theme.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20),
-        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+        child: CircularProgressIndicator(
+          color: theme.colorScheme.primary, 
+          strokeWidth: 2
+        ),
       ),
     );
   }

@@ -118,6 +118,7 @@ class AppStrings {
   static const String notVerified = "Not verified";
   static const String unknown = "Unknown";
   static const String logout = "Logout";
+  static const String switchTo = "Switch to";
 
   // Validation Messages
   static const String emailRequired = "Email is required";
