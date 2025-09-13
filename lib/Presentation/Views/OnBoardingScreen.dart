@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:openlibrary_book_explorer/Configuration/Routes.dart';
+import 'package:openlibrary_book_explorer/utils/Routes.dart';
 import 'package:openlibrary_book_explorer/Models/OnBoardingModel.dart';
 import 'package:openlibrary_book_explorer/Presentation/Elements/CustomBottom.dart';
 import 'package:openlibrary_book_explorer/Presentation/Elements/CustomImageView.dart';

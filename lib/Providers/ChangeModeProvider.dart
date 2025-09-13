@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Configuration/Colors.dart';
+import '../utils/Colors.dart';
 
 class ThemeProvider extends ChangeNotifier {
   bool _isNightMode = false;
@@ -26,9 +26,8 @@ class ThemeProvider extends ChangeNotifier {
       : AppColors.dayButtonBackground;
 
   /// Button Text Color
-  Color get buttonTextColor => _isNightMode
-      ? AppColors.nightButtonText
-      : AppColors.dayButtonText;
+  Color get buttonTextColor =>
+      _isNightMode ? AppColors.nightButtonText : AppColors.dayButtonText;
 
   void toggleTheme() {
     _isNightMode = !_isNightMode;

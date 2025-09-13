@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../Providers/ChangeModeProvider.dart';
 import '../../Providers/AuthenticationProvider.dart';
-import '../../Configuration/Routes.dart';
+import '../../utils/Routes.dart';
+import '../../utils/AppStrings.dart';
 import '../Elements/CustomContainer.dart';
 import '../Elements/CustomText.dart';
 import '../Elements/CustomBottom.dart';
@@ -21,7 +22,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: MyText(
-          text: "Profile",
+          text: AppStrings.profileScreenTitle,
           color: Colors.white,
           size: 20,
           fontWeight: FontWeight.bold,
@@ -78,7 +79,8 @@ class ProfileScreen extends StatelessWidget {
                             // User Name
                             MyText(
                               text:
-                                  currentUser.displayName ?? "OpenLibrary User",
+                                  currentUser.displayName ??
+                                  AppStrings.openlibraryUser,
                               color: Colors.white,
                               size: 24,
                               fontWeight: FontWeight.bold,
@@ -109,7 +111,7 @@ class ProfileScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             MyText(
-                              text: "Account Information",
+                              text: AppStrings.accountInformation,
                               size: 18,
                               fontWeight: FontWeight.bold,
                               color: themeProvider.primaryTextColor,
@@ -117,16 +119,17 @@ class ProfileScreen extends StatelessWidget {
                             SizedBox(height: 16),
                             _buildInfoRow(
                               icon: Icons.email_outlined,
-                              label: "Email",
-                              value: currentUser.email ?? "Not provided",
+                              label: AppStrings.email,
+                              value:
+                                  currentUser.email ?? AppStrings.notProvided,
                               themeProvider: themeProvider,
                             ),
                             _buildInfoRow(
                               icon: Icons.verified_user_outlined,
-                              label: "Email Verified",
+                              label: AppStrings.emailVerified,
                               value: currentUser.emailVerified
-                                  ? "Yes"
-                                  : "Not verified",
+                                  ? AppStrings.yes
+                                  : AppStrings.notVerified,
                               themeProvider: themeProvider,
                               valueColor: currentUser.emailVerified
                                   ? Colors.green
@@ -134,22 +137,22 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             _buildInfoRow(
                               icon: Icons.date_range_outlined,
-                              label: "Account Created",
+                              label: AppStrings.accountCreated,
                               value:
                                   currentUser.metadata.creationTime
                                       ?.toString()
                                       .split(' ')[0] ??
-                                  "Unknown",
+                                  AppStrings.unknown,
                               themeProvider: themeProvider,
                             ),
                             _buildInfoRow(
                               icon: Icons.access_time_outlined,
-                              label: "Last Sign In",
+                              label: AppStrings.lastSignIn,
                               value:
                                   currentUser.metadata.lastSignInTime
                                       ?.toString()
                                       .split(' ')[0] ??
-                                  "Unknown",
+                                  AppStrings.unknown,
                               themeProvider: themeProvider,
                             ),
                           ],
@@ -161,7 +164,7 @@ class ProfileScreen extends StatelessWidget {
 
                     // Logout Button
                     MyButton(
-                      btnLabel: "Logout",
+                      btnLabel: AppStrings.logout,
                       onPressed: () async {
                         showDialog(
                           context: context,
@@ -179,7 +182,7 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 10),
                                   const Text(
-                                    "Logout",
+                                    AppStrings.logout,
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,

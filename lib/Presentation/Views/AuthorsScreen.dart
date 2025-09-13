@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Providers/ChangeModeProvider.dart';
 import '../../Models/AuthorsModel.dart';
-import '../../Configuration/Routes.dart';
+import '../../utils/Routes.dart';
+import '../../utils/AppStrings.dart';
 import '../Elements/CustomContainer.dart';
 import '../Elements/CustomText.dart';
 
@@ -85,7 +86,7 @@ class _AuthorsScreenState extends State<AuthorsScreen> {
                 controller: _searchController,
                 style: const TextStyle(color: Colors.white, fontSize: 18),
                 decoration: const InputDecoration(
-                  hintText: "Search Author",
+                  hintText: AppStrings.searchAuthor,
                   hintStyle: TextStyle(color: Colors.white70),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.zero,
@@ -93,7 +94,7 @@ class _AuthorsScreenState extends State<AuthorsScreen> {
                 autofocus: true,
               )
             : MyText(
-                text: "Authors Names",
+                text: AppStrings.authorsScreenTitle,
                 color: Colors.white,
                 size: 20,
                 fontWeight: FontWeight.bold,
@@ -137,7 +138,7 @@ class _AuthorsScreenState extends State<AuthorsScreen> {
                 child: _filteredAuthors.isEmpty
                     ? const Center(
                         child: Text(
-                          "No authors found",
+                          AppStrings.noAuthorsFound,
                           style: TextStyle(fontSize: 16),
                         ),
                       )
@@ -187,7 +188,7 @@ class _AuthorsScreenState extends State<AuthorsScreen> {
                                           color: themeProvider.primaryTextColor,
                                         ),
                                         MyText(
-                                          text: "Click to search books",
+                                          text: AppStrings.clickToSearchBooks,
                                           size: 14,
                                           color: themeProvider.primaryTextColor
                                               .withOpacity(0.7),

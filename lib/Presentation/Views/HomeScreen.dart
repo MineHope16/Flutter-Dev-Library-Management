@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:openlibrary_book_explorer/Providers/ChangeModeProvider.dart';
 import 'package:openlibrary_book_explorer/Providers/AuthenticationProvider.dart';
-import 'package:openlibrary_book_explorer/Configuration/Routes.dart';
+import 'package:openlibrary_book_explorer/utils/Routes.dart';
+import 'package:openlibrary_book_explorer/utils/AppStrings.dart';
 import 'package:openlibrary_book_explorer/Models/AuthorsModel.dart';
 import 'package:openlibrary_book_explorer/Models/CategoriesModel.dart';
 import 'package:openlibrary_book_explorer/Models/BookModel.dart';
@@ -108,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
           iconColor: Colors.white70,
         ),
         title: MyText(
-          text: "OpenLibrary Book Explorer",
+          text: AppStrings.appName,
           color: Colors.white70,
           fontWeight: FontWeight.bold,
           size: 22,
@@ -662,13 +663,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildQuickActionsGrid() {
     final quickActions = [
       {
-        'title': 'Browse Categories',
+        'title': AppStrings.browseCategories,
         'icon': Icons.category_outlined,
         'color': Colors.orange,
         'route': AppRoutes.categories,
       },
       {
-        'title': 'Famous Authors',
+        'title': AppStrings.famousAuthors,
         'icon': Icons.person_outline,
         'color': Colors.green,
         'route': AppRoutes.authors,

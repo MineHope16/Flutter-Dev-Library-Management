@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../Providers/ChangeModeProvider.dart';
 import '../../Models/BookModel.dart';
 import '../../Services/OpenLibraryService.dart';
+import '../../utils/AppStrings.dart';
 import '../Elements/CustomContainer.dart';
 import '../Elements/CustomText.dart';
 import '../Elements/CustomTextField.dart';
@@ -123,7 +124,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error searching books: ${e.toString()}'),
+          content: Text('${AppStrings.errorSearchingBooks}: ${e.toString()}'),
           backgroundColor: Colors.red,
         ),
       );
@@ -176,7 +177,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         title: MyText(
-          text: "Search Books",
+          text: AppStrings.searchScreenTitle,
           color: Colors.white,
           size: 20,
           fontWeight: FontWeight.bold,
@@ -209,7 +210,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   Expanded(
                     child: MyTextField(
                       controller: _searchController,
-                      hintText: "Search books, authors, or ISBN...",
+                      hintText: AppStrings.searchBooks,
                       hintColor: themeProvider.secondaryTextColor,
                       textColor: themeProvider.primaryTextColor,
                       backgroundColor: Colors.transparent,
@@ -303,7 +304,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           CircularProgressIndicator(color: Colors.blue),
                           SizedBox(height: 16),
                           MyText(
-                            text: "Searching OpenLibrary...",
+                            text: AppStrings.searchingOpenLibrary,
                             color: themeProvider.secondaryTextColor,
                             size: 16,
                           ),
@@ -351,8 +352,8 @@ class _SearchScreenState extends State<SearchScreen> {
           SizedBox(height: 16),
           MyText(
             text: _lastQuery.isEmpty
-                ? "Search millions of books!"
-                : "No books found",
+                ? AppStrings.searchMillionsOfBooks
+                : AppStrings.noBooksFound,
             size: 18,
             fontWeight: FontWeight.bold,
             color: themeProvider.primaryTextColor,
@@ -360,8 +361,8 @@ class _SearchScreenState extends State<SearchScreen> {
           SizedBox(height: 8),
           MyText(
             text: _lastQuery.isEmpty
-                ? "Enter a book title, author name, or ISBN to start searching"
-                : "Try adjusting your search terms or filters",
+                ? AppStrings.enterSearchTerms
+                : AppStrings.adjustSearchTerms,
             size: 14,
             color: themeProvider.secondaryTextColor,
             textAlign: TextAlign.center,
@@ -422,7 +423,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   SizedBox(height: 4),
                   MyText(
-                    text: "by ${book.authorNames}",
+                    text: "${AppStrings.by} ${book.authorNames}",
                     size: 14,
                     color: themeProvider.secondaryTextColor,
                     maxLines: 1,
@@ -430,7 +431,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (book.displayYear.isNotEmpty) ...[
                     SizedBox(height: 4),
                     MyText(
-                      text: "Published: ${book.displayYear}",
+                      text: "${AppStrings.published}: ${book.displayYear}",
                       size: 12,
                       color: themeProvider.secondaryTextColor,
                     ),
@@ -487,13 +488,13 @@ class _SearchScreenState extends State<SearchScreen> {
   String _getFilterLabel(SearchFilter filter) {
     switch (filter) {
       case SearchFilter.all:
-        return 'All';
+        return AppStrings.all;
       case SearchFilter.title:
-        return 'Title';
+        return AppStrings.title;
       case SearchFilter.author:
-        return 'Author';
+        return AppStrings.author;
       case SearchFilter.isbn:
-        return 'ISBN';
+        return AppStrings.isbn;
     }
   }
 }

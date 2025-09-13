@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openlibrary_book_explorer/Providers/ChangeModeProvider.dart';
-import 'package:openlibrary_book_explorer/Configuration/Routes.dart';
+import 'package:openlibrary_book_explorer/utils/Routes.dart';
 import 'package:openlibrary_book_explorer/Presentation/CommonWidgets/AuthenticationTextField.dart';
 import 'package:openlibrary_book_explorer/Presentation/Elements/CustomBottom.dart';
 import 'package:openlibrary_book_explorer/Presentation/Elements/CustomText.dart';

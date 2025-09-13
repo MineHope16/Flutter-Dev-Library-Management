@@ -3,7 +3,8 @@ import 'package:openlibrary_book_explorer/Providers/ChangeModeProvider.dart';
 import 'package:openlibrary_book_explorer/Models/CategoriesModel.dart';
 import 'package:openlibrary_book_explorer/Presentation/Elements/CustomText.dart';
 import 'package:openlibrary_book_explorer/Services/OpenLibraryService.dart';
-import 'package:openlibrary_book_explorer/Configuration/Routes.dart';
+import 'package:openlibrary_book_explorer/utils/Routes.dart';
+import 'package:openlibrary_book_explorer/utils/AppStrings.dart';
 import 'package:provider/provider.dart';
 
 import '../Elements/CustomContainer.dart';
@@ -62,7 +63,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error loading categories: ${e.toString()}'),
+          content: Text('${AppStrings.errorLoadingCategories} ${e.toString()}'),
           backgroundColor: Colors.red,
         ),
       );
@@ -92,7 +93,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 controller: _searchController,
                 style: const TextStyle(color: Colors.white, fontSize: 18),
                 decoration: const InputDecoration(
-                  hintText: "Search Categories",
+                  hintText: AppStrings.searchCategories,
                   hintStyle: TextStyle(color: Colors.white70),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.zero,
@@ -100,7 +101,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 autofocus: true,
               )
             : MyText(
-                text: "Book Categories",
+                text: AppStrings.categoriesScreenTitle,
                 color: Colors.white,
                 size: 20,
                 fontWeight: FontWeight.bold,
@@ -148,7 +149,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           CircularProgressIndicator(color: Colors.blue),
                           SizedBox(height: 16),
                           MyText(
-                            text: "Loading categories...",
+                            text: AppStrings.loadingCategories,
                             color: themeProvider.secondaryTextColor,
                             size: 16,
                           ),

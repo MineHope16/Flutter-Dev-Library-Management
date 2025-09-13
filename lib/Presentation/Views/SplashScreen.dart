@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:openlibrary_book_explorer/Configuration/Routes.dart';
+import 'package:openlibrary_book_explorer/utils/Routes.dart';
 import 'package:video_player/video_player.dart';
 
 class SplashScreen extends StatefulWidget {

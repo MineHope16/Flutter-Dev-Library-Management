@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:openlibrary_book_explorer/Models/RegistrationModel.dart';
 import 'package:openlibrary_book_explorer/Services/AuthenticationServices.dart';
 import 'package:openlibrary_book_explorer/Services/RegistrationServices.dart';
-import 'package:openlibrary_book_explorer/Configuration/Routes.dart';
+import 'package:openlibrary_book_explorer/utils/Routes.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
   bool isLoading = false;

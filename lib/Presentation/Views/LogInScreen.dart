@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:openlibrary_book_explorer/Configuration/Routes.dart';
+import 'package:openlibrary_book_explorer/utils/Routes.dart';
 import 'package:openlibrary_book_explorer/Providers/AuthenticationProvider.dart';
 import 'package:provider/provider.dart';
 
