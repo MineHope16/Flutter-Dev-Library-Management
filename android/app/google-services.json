@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "350744911073",
+    "firebase_url": "https://dattaram-work-dev-default-rtdb.firebaseio.com",
+    "project_id": "dattaram-work-dev",
+    "storage_bucket": "dattaram-work-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350744911073:android:fc47d2b638f4c17e88aba0",
+        "android_client_info": {
+          "package_name": "com.example.librarymanagement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350744911073-mline3bdl769d4b04q2b6atiio3se8no.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.librarymanagement",
+            "certificate_hash": "83ef5eccf9937d4a212c9565929516cc4c770615"
+          }
+        },
+        {
+          "client_id": "350744911073-j3an2f6r8g5aommao022rnf3anv93kau.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrYVZDhdRs6Pi8TAOvwE9BwviI629vxRU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350744911073-j3an2f6r8g5aommao022rnf3anv93kau.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "350744911073-vcvp7n3h7tbkrlv41m9nidolsvv3g96l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.openlibraryBookExplorer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350744911073:android:31359c96c32e562388aba0",
+        "android_client_info": {
+          "package_name": "com.example.openlibrary_book_explorer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350744911073-j3an2f6r8g5aommao022rnf3anv93kau.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrYVZDhdRs6Pi8TAOvwE9BwviI629vxRU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350744911073-j3an2f6r8g5aommao022rnf3anv93kau.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "350744911073-vcvp7n3h7tbkrlv41m9nidolsvv3g96l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.openlibraryBookExplorer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
