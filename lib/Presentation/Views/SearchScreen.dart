@@ -195,70 +195,103 @@ class _SearchScreenState extends State<SearchScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Search Bar
-            Row(
-              children: [
-                Expanded(
-                  child: MyTextField(
-                    controller: _searchController,
-                    hintText: "Search books, authors, or ISBN...",
-                    hintColor: themeProvider.secondaryTextColor,
-                    textColor: themeProvider.primaryTextColor,
-                    backgroundColor: themeProvider.buttonBackgroundColor,
-                    borderRadius: BorderRadius.circular(12),
-                    textSize: 16,
-                  ),
-                ),
-                SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () {
-                    if (_searchController.text.isNotEmpty) {
-                      _performSearch(_searchController.text);
-                    }
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(Icons.search, color: Colors.white, size: 24),
-                  ),
-                ),
-              ],
-            ),
+            const SizedBox(height: 10),
 
-            SizedBox(height: 16),
-
-            // Filter Chips
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+            // Search Bar with improved styling
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(16),
+              ),
               child: Row(
-                children: SearchFilter.values.map((filter) {
-                  final isSelected = _selectedFilter == filter;
-                  return Padding(
-                    padding: EdgeInsets.only(right: 8),
-                    child: FilterChip(
-                      label: Text(_getFilterLabel(filter)),
-                      selected: isSelected,
-                      onSelected: (selected) => _onFilterChanged(filter),
-                      selectedColor: Colors.blue.withOpacity(0.3),
-                      backgroundColor: themeProvider.buttonBackgroundColor,
-                      labelStyle: TextStyle(
-                        color: isSelected
-                            ? Colors.blue
-                            : themeProvider.primaryTextColor,
-                        fontWeight: isSelected
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+                children: [
+                  Expanded(
+                    child: MyTextField(
+                      controller: _searchController,
+                      hintText: "Search books, authors, or ISBN...",
+                      hintColor: themeProvider.secondaryTextColor,
+                      textColor: themeProvider.primaryTextColor,
+                      backgroundColor: Colors.transparent,
+                      borderRadius: BorderRadius.circular(12),
+                      textSize: 16,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () {
+                      if (_searchController.text.isNotEmpty) {
+                        _performSearch(_searchController.text);
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.search,
+                        color: Colors.white,
+                        size: 24,
                       ),
                     ),
-                  );
-                }).toList(),
+                  ),
+                ],
               ),
             ),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 20),
+
+            // Filter Chips with improved styling
+            Container(
+              height: 50,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: SearchFilter.values.map((filter) {
+                    final isSelected = _selectedFilter == filter;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: GestureDetector(
+                        onTap: () => _onFilterChanged(filter),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? Colors.blue
+                                : Colors.white.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(25),
+                            border: isSelected
+                                ? null
+                                : Border.all(
+                                    color: Colors.white.withOpacity(0.3),
+                                  ),
+                          ),
+                          child: Text(
+                            _getFilterLabel(filter),
+                            style: TextStyle(
+                              color: isSelected
+                                  ? Colors.white
+                                  : themeProvider.primaryTextColor,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
 
             // Search Results
             Expanded(
