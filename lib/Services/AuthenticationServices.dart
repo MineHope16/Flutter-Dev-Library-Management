@@ -4,6 +4,7 @@ class AuthenticationServices {
   Future<User?> registerUser({
     required String email,
     required String password,
+    required String name,
   }) async {
     UserCredential userCredential = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
@@ -12,7 +13,7 @@ class AuthenticationServices {
     User? user = userCredential.user;
     if (user != null) {
       // Update user display name first to make emails look more professional
-      await user.updateDisplayName('OpenLibrary Explorer User');
+      await user.updateDisplayName(name);
 
       // Send verification email (using default Firebase settings)
       await user.sendEmailVerification();

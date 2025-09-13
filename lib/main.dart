@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:openlibrary_book_explorer/Providers/AuthenticationProvider.dart';
 import 'package:openlibrary_book_explorer/Providers/ChangeModeProvider.dart';
+import 'package:openlibrary_book_explorer/Providers/FavoritesProvider.dart';
 import 'package:provider/provider.dart';
 import 'utils/Routes.dart';
 import 'utils/AppTheme.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ThemeProvider>.value(value: themeProvider),
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
+        ChangeNotifierProvider(create: (_) => FavoritesProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, theme, _) {

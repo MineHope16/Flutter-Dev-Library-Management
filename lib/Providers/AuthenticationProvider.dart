@@ -24,6 +24,7 @@ class AuthenticationProvider extends ChangeNotifier {
       await AuthenticationServices().registerUser(
         email: email,
         password: password,
+        name: name,
       );
 
       // Step 2: Save user data in Firestore (or DB)

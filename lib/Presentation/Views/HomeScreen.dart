@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:openlibrary_book_explorer/Providers/ChangeModeProvider.dart';
 import 'package:openlibrary_book_explorer/Providers/AuthenticationProvider.dart';
+import 'package:openlibrary_book_explorer/Providers/FavoritesProvider.dart';
 import 'package:openlibrary_book_explorer/utils/Routes.dart';
 import 'package:openlibrary_book_explorer/utils/AppStrings.dart';
 import 'package:openlibrary_book_explorer/Models/AuthorsModel.dart';
@@ -11,7 +12,6 @@ import 'package:openlibrary_book_explorer/Services/OpenLibraryService.dart';
 import 'package:openlibrary_book_explorer/Presentation/Elements/CustomContainer.dart';
 import 'package:provider/provider.dart';
 
-import '../../Models/FavouriteBookModel.dart';
 import '../Elements/CustomText.dart';
 import 'BookDetailsScreen.dart';
 import '../CommonWidgets/ThemeToggleWidget.dart';
@@ -35,6 +35,17 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadHomeData();
+    _initializeFavorites();
+  }
+
+  Future<void> _initializeFavorites() async {
+    // Initialize favorites when HomeScreen loads
+    try {
+      await context.read<FavoritesProvider>().initializeFavorites();
+    } catch (e) {
+      // Handle initialization error silently
+      debugPrint('Error initializing favorites: $e');
+    }
   }
 
   Future<void> _loadHomeData() async {
@@ -81,14 +92,15 @@ class _HomeScreenState extends State<HomeScreen> {
     AuthorsModel(name: "Stephen King"),
   ];
 
-  List<FavouriteBookModel> favouriteBookModel = [
-    FavouriteBookModel(name: "Fiction"),
-    FavouriteBookModel(name: "Non-Fiction"),
-    FavouriteBookModel(name: "Science"),
-    FavouriteBookModel(name: "History"),
-    FavouriteBookModel(name: "Technology"),
-    FavouriteBookModel(name: "Kids"),
-    FavouriteBookModel(name: "Businesses"),
+  // Categories will be handled differently now
+  List<String> popularCategories = [
+    "Fiction",
+    "Non-Fiction",
+    "Science",
+    "History",
+    "Technology",
+    "Kids",
+    "Business",
   ];
 
   @override
@@ -214,9 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   onTap: () {
                     Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Favorites feature coming soon!")),
-                    );
+                    Navigator.pushNamed(context, AppRoutes.favorites);
                   },
                 ),
                 ListTile(
@@ -707,6 +717,12 @@ class _HomeScreenState extends State<HomeScreen> {
         'icon': Icons.person_outline,
         'color': Colors.green,
         'route': AppRoutes.authors,
+      },
+      {
+        'title': 'My Favorites',
+        'icon': Icons.favorite_outline,
+        'color': Colors.red,
+        'route': AppRoutes.favorites,
       },
       {
         'title': 'My Profile',

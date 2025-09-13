@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import '../../Models/BookModel.dart';
 import '../../Providers/ChangeModeProvider.dart';
+import '../../Providers/FavoritesProvider.dart';
 import '../../Services/OpenLibraryService.dart';
 import '../Elements/CustomText.dart';
 import '../Elements/CustomContainer.dart';
@@ -565,29 +566,53 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
         const SizedBox(width: 12),
 
         Expanded(
-          child: OutlinedButton.icon(
-            onPressed: () {
-              // Add to favorites functionality
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: MyText(
-                    text: "Added to favorites!",
-                    color: Colors.white,
+          child: Consumer<FavoritesProvider>(
+            builder: (context, favoritesProvider, child) {
+              final isFavorited = favoritesProvider.isFavorited(widget.book);
+
+              return OutlinedButton.icon(
+                onPressed: () async {
+                  // Toggle favorite status with Firebase
+                  final success = await favoritesProvider.toggleFavorite(
+                    widget.book,
+                  );
+
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: MyText(
+                          text: isFavorited
+                              ? "Removed from favorites!"
+                              : "Added to favorites!",
+                          color: Colors.white,
+                        ),
+                        backgroundColor: success
+                            ? theme.colorScheme.primary
+                            : Colors.red,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                },
+                icon: Icon(
+                  isFavorited ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorited ? Colors.red : theme.colorScheme.primary,
+                ),
+                label: MyText(
+                  text: isFavorited
+                      ? "Remove from Favorites"
+                      : "Add to Favorites",
+                  size: 14,
+                  color: isFavorited ? Colors.red : theme.colorScheme.primary,
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(
+                    color: isFavorited ? Colors.red : theme.colorScheme.primary,
                   ),
-                  backgroundColor: theme.colorScheme.primary,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
               );
             },
-            icon: Icon(Icons.favorite_border),
-            label: MyText(
-              text: "Add to Favorites",
-              size: 14,
-              color: theme.colorScheme.primary,
-            ),
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: theme.colorScheme.primary),
-              padding: const EdgeInsets.symmetric(vertical: 12),
-            ),
           ),
         ),
       ],

@@ -6,6 +6,7 @@ import 'package:openlibrary_book_explorer/Presentation/Views/LogInScreen.dart';
 import 'package:openlibrary_book_explorer/Presentation/Views/ProfileScreen.dart';
 import 'package:openlibrary_book_explorer/Presentation/Views/SignUpScreen.dart';
 import 'package:openlibrary_book_explorer/Presentation/Views/SearchScreen.dart';
+import 'package:openlibrary_book_explorer/Presentation/Views/FavoritesScreen.dart';
 import '../Presentation/Views/HomeScreen.dart';
 import '../Presentation/Views/OnBoardingScreen.dart';
 import '../Presentation/Views/SplashScreen.dart';
@@ -21,6 +22,7 @@ class AppRoutes {
   static const String authors = '/authors';
   static const String profile = '/profile';
   static const String search = '/search';
+  static const String favorites = '/favorites';
 
   static Map<String, WidgetBuilder> routes = {
     splash: (context) => SplashScreen(),
@@ -33,5 +35,6 @@ class AppRoutes {
     authors: (context) => AuthorsScreen(),
     profile: (context) => ProfileScreen(),
     search: (context) => SearchScreen(),
+    favorites: (context) => FavoritesScreen(),
   };
 }
