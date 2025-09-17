@@ -40,275 +40,287 @@ class ProfileScreen extends StatelessWidget {
           width: double.infinity,
           height: double.infinity,
           decoration: BoxDecoration(gradient: themeProvider.backgroundColor),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: currentUser != null
-              ? Column(
-                  children: [
-                    // Profile Header
-                    Card(
-                      elevation: 8,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(24),
-                        decoration: BoxDecoration(
+              ? SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Column(
+                    children: [
+                      // Profile Header
+                      Card(
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.blue.shade400,
-                              Colors.purple.shade400,
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.blue.shade400,
+                                Colors.purple.shade400,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              // Profile Avatar
+                              CircleAvatar(
+                                radius: 50,
+                                backgroundColor: Colors.white.withOpacity(0.3),
+                                child: Icon(
+                                  Icons.person,
+                                  size: 60,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(height: 16),
+                              // User Name
+                              MyText(
+                                text:
+                                    currentUser.displayName ??
+                                    AppStrings.openlibraryUser,
+                                color: Colors.white,
+                                size: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              SizedBox(height: 8),
+                              // User Email
+                              MyText(
+                                text: currentUser.email ?? "",
+                                color: Colors.white.withOpacity(0.9),
+                                size: 16,
+                              ),
                             ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
                           ),
                         ),
-                        child: Column(
-                          children: [
-                            // Profile Avatar
-                            CircleAvatar(
-                              radius: 50,
-                              backgroundColor: Colors.white.withOpacity(0.3),
-                              child: Icon(
-                                Icons.person,
-                                size: 60,
-                                color: Colors.white,
+                      ),
+
+                      SizedBox(height: 24),
+
+                      // Account Information
+                      Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              MyText(
+                                text: AppStrings.accountInformation,
+                                size: 18,
+                                fontWeight: FontWeight.bold,
+                                color: themeProvider.primaryTextColor,
                               ),
-                            ),
-                            SizedBox(height: 16),
-                            // User Name
-                            MyText(
-                              text:
-                                  currentUser.displayName ??
-                                  AppStrings.openlibraryUser,
-                              color: Colors.white,
-                              size: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            SizedBox(height: 8),
-                            // User Email
-                            MyText(
-                              text: currentUser.email ?? "",
-                              color: Colors.white.withOpacity(0.9),
-                              size: 16,
-                            ),
-                          ],
+                              SizedBox(height: 16),
+                              _buildInfoRow(
+                                icon: Icons.email_outlined,
+                                label: AppStrings.email,
+                                value:
+                                    currentUser.email ?? AppStrings.notProvided,
+                                themeProvider: themeProvider,
+                              ),
+                              _buildInfoRow(
+                                icon: Icons.verified_user_outlined,
+                                label: AppStrings.emailVerified,
+                                value: currentUser.emailVerified
+                                    ? AppStrings.yes
+                                    : AppStrings.notVerified,
+                                themeProvider: themeProvider,
+                                valueColor: currentUser.emailVerified
+                                    ? Colors.green
+                                    : Colors.orange,
+                              ),
+                              _buildInfoRow(
+                                icon: Icons.date_range_outlined,
+                                label: AppStrings.accountCreated,
+                                value:
+                                    currentUser.metadata.creationTime
+                                        ?.toString()
+                                        .split(' ')[0] ??
+                                    AppStrings.unknown,
+                                themeProvider: themeProvider,
+                              ),
+                              _buildInfoRow(
+                                icon: Icons.access_time_outlined,
+                                label: AppStrings.lastSignIn,
+                                value:
+                                    currentUser.metadata.lastSignInTime
+                                        ?.toString()
+                                        .split(' ')[0] ??
+                                    AppStrings.unknown,
+                                themeProvider: themeProvider,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
 
-                    SizedBox(height: 24),
+                      const SizedBox(height: 20),
 
-                    // Account Information
-                    Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
+                      // Theme Settings Section
+                      MyContainer(
+                        color: Colors.white.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Container(
-                        padding: EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            MyText(
-                              text: AppStrings.accountInformation,
-                              size: 18,
-                              fontWeight: FontWeight.bold,
-                              color: themeProvider.primaryTextColor,
-                            ),
-                            SizedBox(height: 16),
-                            _buildInfoRow(
-                              icon: Icons.email_outlined,
-                              label: AppStrings.email,
-                              value:
-                                  currentUser.email ?? AppStrings.notProvided,
-                              themeProvider: themeProvider,
-                            ),
-                            _buildInfoRow(
-                              icon: Icons.verified_user_outlined,
-                              label: AppStrings.emailVerified,
-                              value: currentUser.emailVerified
-                                  ? AppStrings.yes
-                                  : AppStrings.notVerified,
-                              themeProvider: themeProvider,
-                              valueColor: currentUser.emailVerified
-                                  ? Colors.green
-                                  : Colors.orange,
-                            ),
-                            _buildInfoRow(
-                              icon: Icons.date_range_outlined,
-                              label: AppStrings.accountCreated,
-                              value:
-                                  currentUser.metadata.creationTime
-                                      ?.toString()
-                                      .split(' ')[0] ??
-                                  AppStrings.unknown,
-                              themeProvider: themeProvider,
-                            ),
-                            _buildInfoRow(
-                              icon: Icons.access_time_outlined,
-                              label: AppStrings.lastSignIn,
-                              value:
-                                  currentUser.metadata.lastSignInTime
-                                      ?.toString()
-                                      .split(' ')[0] ??
-                                  AppStrings.unknown,
-                              themeProvider: themeProvider,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Theme Settings Section
-                    MyContainer(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            MyText(
-                              text: "Theme Settings",
-                              size: 18,
-                              fontWeight: FontWeight.w600,
-                              color: themeProvider.primaryTextColor,
-                            ),
-                            const SizedBox(height: 16),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                MyText(
-                                  text: "Appearance",
-                                  size: 14,
-                                  color: themeProvider.secondaryTextColor,
-                                ),
-                                ThemeToggleWidget(
-                                  style: ThemeToggleStyle.segmentedButton,
-                                  showLabels: false,
-                                  iconSize: 20,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            MyText(
-                              text:
-                                  "Current: ${themeProvider.themeModeDisplayName}",
-                              size: 12,
-                              color: themeProvider.secondaryTextColor,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    Spacer(),
-
-                    // Logout Button
-                    MyButton(
-                      btnLabel: AppStrings.logout,
-                      onPressed: () async {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              MyText(
+                                text: "Theme Settings",
+                                size: 18,
+                                fontWeight: FontWeight.w600,
+                                color: themeProvider.primaryTextColor,
                               ),
-                              title: Row(
+                              const SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Icon(
-                                    Icons.logout,
-                                    color: Colors.red,
-                                    size: 28,
+                                  MyText(
+                                    text: "Appearance",
+                                    size: 14,
+                                    color: themeProvider.secondaryTextColor,
                                   ),
-                                  const SizedBox(width: 10),
-                                  const Text(
-                                    AppStrings.logout,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  ThemeToggleWidget(
+                                    style: ThemeToggleStyle.segmentedButton,
+                                    showLabels: false,
+                                    iconSize: 20,
                                   ),
                                 ],
                               ),
-                              content: const Text(
-                                "Are you sure you want to logout from your account?",
-                                style: TextStyle(fontSize: 16),
+                              const SizedBox(height: 12),
+                              MyText(
+                                text:
+                                    "Current: ${themeProvider.themeModeDisplayName}",
+                                size: 12,
+                                color: themeProvider.secondaryTextColor,
                               ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    "Cancel",
-                                    style: TextStyle(color: Colors.grey[600]),
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    Navigator.pop(context);
-                                    await authProvider.logout();
-                                    Navigator.pushReplacementNamed(
-                                      context,
-                                      AppRoutes.login,
-                                    );
-                                  },
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: Colors.red,
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 10,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                  child: const Text("Logout"),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      color: Colors.red,
-                    ),
+                            ],
+                          ),
+                        ),
+                      ),
 
-                    SizedBox(height: 20),
-                  ],
-                )
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.person_off_outlined,
-                        size: 80,
-                        color: themeProvider.primaryTextColor.withOpacity(0.5),
-                      ),
-                      SizedBox(height: 16),
-                      MyText(
-                        text: "No user logged in",
-                        size: 18,
-                        color: themeProvider.primaryTextColor.withOpacity(0.7),
-                      ),
-                      SizedBox(height: 24),
+                      SizedBox(height: 30),
+
+                      // Logout Button
                       MyButton(
-                        btnLabel: "Go to Login",
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                            context,
-                            AppRoutes.login,
+                        btnLabel: AppStrings.logout,
+                        onPressed: () async {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                title: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.logout,
+                                      color: Colors.red,
+                                      size: 28,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Text(
+                                      AppStrings.logout,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                content: const Text(
+                                  "Are you sure you want to logout from your account?",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      "Cancel",
+                                      style: TextStyle(color: Colors.grey[600]),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                      await authProvider.logout();
+                                      Navigator.pushReplacementNamed(
+                                        context,
+                                        AppRoutes.login,
+                                      );
+                                    },
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 10,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    child: const Text("Logout"),
+                                  ),
+                                ],
+                              );
+                            },
                           );
                         },
+                        color: Colors.red,
                       ),
+
+                      SizedBox(height: 20),
                     ],
+                  ),
+                )
+              : SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.person_off_outlined,
+                          size: 80,
+                          color: themeProvider.primaryTextColor.withOpacity(
+                            0.5,
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        MyText(
+                          text: "No user logged in",
+                          size: 18,
+                          color: themeProvider.primaryTextColor.withOpacity(
+                            0.7,
+                          ),
+                        ),
+                        SizedBox(height: 24),
+                        MyButton(
+                          btnLabel: "Go to Login",
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                              context,
+                              AppRoutes.login,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
         ),

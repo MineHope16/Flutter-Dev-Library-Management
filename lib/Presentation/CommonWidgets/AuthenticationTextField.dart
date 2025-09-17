@@ -11,6 +11,10 @@ class AuthenticationTextField extends StatelessWidget {
   String hintText;
   IconData? suffixIcon;
   bool isPasswordField = false;
+  bool? obscureText;
+  VoidCallback? onSuffixIconTap;
+  String? Function(String?)? validator;
+
   AuthenticationTextField({
     super.key,
     required this.controller,
@@ -18,6 +22,9 @@ class AuthenticationTextField extends StatelessWidget {
     required this.hintText,
     this.suffixIcon,
     required this.isPasswordField,
+    this.obscureText,
+    this.onSuffixIconTap,
+    this.validator,
   });
 
   @override
@@ -33,6 +40,12 @@ class AuthenticationTextField extends StatelessWidget {
       suffixIcon: suffixIcon,
       suffixColor: themeProvider.primaryTextColor,
       isPasswordField: isPasswordField,
+      isSecure: obscureText ?? isPasswordField,
+      onSuffixTap: onSuffixIconTap,
+      validator: validator,
+      autoValidateMode: validator != null
+          ? AutovalidateMode.onUnfocus
+          : AutovalidateMode.disabled,
     );
   }
 }

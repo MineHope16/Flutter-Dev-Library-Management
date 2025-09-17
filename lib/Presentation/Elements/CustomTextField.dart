@@ -141,6 +141,8 @@ class MyTextField extends StatefulWidget {
 
 class _MyTextFieldState extends State<MyTextField> {
   late bool isTextObscured;
+  bool hasError = false;
+  String? errorText;
 
   @override
   void initState() {
@@ -160,166 +162,205 @@ class _MyTextFieldState extends State<MyTextField> {
         top: widget.paddingTop ?? 0,
         bottom: widget.paddingBottom ?? 0,
       ),
-      child: Container(
-        width: widget.width ?? double.infinity,
-        height: widget.height ?? 56,
-        // fixed height
-        margin: widget.containerMargin,
-        padding:
-            widget.containerPadding ??
-            const EdgeInsets.symmetric(horizontal: 14),
-        decoration: BoxDecoration(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
-          color:
-              widget.backgroundColor ??
-              (isDarkMode ? const Color(0xFF2C2C2C) : Colors.white),
-          border: widget.removeBorder
-              ? null
-              : (widget.textFieldBorder ??
-                    Border.all(
-                      color: isDarkMode
-                          ? const Color(0xFF555555)
-                          : const Color(0xFF909090),
-                      width: 0.5,
-                    )),
-        ),
-        child: Center(
-          child: TextFormField(
-            onChanged: widget.onChanged,
-            onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-            focusNode: widget.focusNode,
-            inputFormatters: widget.textInputFormatters,
-            initialValue: widget.initialTextValue,
-            textAlign: widget.textAlign ?? TextAlign.start,
-            autovalidateMode: widget.autoValidateMode,
-            onTap: widget.onTap,
-            controller: widget.controller,
-            keyboardType: widget.keyboardType,
-            textInputAction: widget.textInputAction,
-            obscureText: widget.isPasswordField ? isTextObscured : false,
-            obscuringCharacter: widget.obscuringCharacter ?? "*",
-            readOnly: widget.readOnly,
-            autofocus: false,
-            maxLines: widget.maxLines ?? 1,
-            minLines: widget.minLines ?? 1,
-            validator: widget.validator,
-            cursorColor: widget.cursorColor ?? theme.colorScheme.primary,
-            decoration:
-                widget.decoration ??
-                InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  labelText: widget.labelText,
-                  labelStyle: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: widget.labelColor ?? theme.colorScheme.onSurface,
-                    fontSize: widget.labelSize ?? 20,
-                    fontWeight: FontWeight.normal,
-                  ),
-                  isDense: true,
-                  prefixIcon: widget.prefixIcon != null
-                      ? Icon(widget.prefixIcon, size: widget.prefixIconSize)
-                      : widget.prefixIcon == null &&
-                            widget.icon != null &&
-                            !widget.isSuffixIcon
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Image.asset(
-                            widget.icon!,
-                            height: 20,
-                            width: 20,
-                            fit: BoxFit.contain,
-                            color:
-                                widget.prefixIconColor ??
-                                const Color(0xff7B7B7B),
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.error, size: 20),
-                          ),
-                        )
-                      : null,
-                  prefixIconConstraints:
-                      widget.prefixIconConstraints ??
-                      const BoxConstraints(minWidth: 36, minHeight: 36),
-                  suffixStyle: widget.suffixStyle,
-                  suffixIcon: widget.suffixIcon != null
-                      ? Icon(
-                          widget.suffixIcon,
-                          size: 25,
-                          color: widget.suffixColor,
-                        )
-                      : widget.isPasswordField
-                      ? IconButton(
-                          icon: Icon(
-                            isTextObscured
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined,
-                            color:
-                                widget.passwordIconColor ??
-                                theme.colorScheme.onSurface,
-                            size: 25,
-                          ),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(
-                            minWidth: 36,
-                            minHeight: 36,
-                          ),
-                          onPressed: () {
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: widget.width ?? double.infinity,
+            height: widget.height ?? 56,
+            // fixed height for input area only
+            margin: widget.containerMargin,
+            padding:
+                widget.containerPadding ??
+                const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
+              color:
+                  widget.backgroundColor ??
+                  (isDarkMode ? const Color(0xFF2C2C2C) : Colors.white),
+              border: widget.removeBorder
+                  ? null
+                  : (widget.textFieldBorder ??
+                        Border.all(
+                          color: hasError
+                              ? Colors.red.withOpacity(0.5)
+                              : (isDarkMode
+                                    ? const Color(0xFF555555)
+                                    : const Color(0xFF909090)),
+                          width: hasError ? 1.0 : 0.5,
+                        )),
+            ),
+            child: Center(
+              child: TextFormField(
+                onChanged: widget.onChanged,
+                onTapOutside: (_) =>
+                    FocusManager.instance.primaryFocus?.unfocus(),
+                focusNode: widget.focusNode,
+                inputFormatters: widget.textInputFormatters,
+                initialValue: widget.initialTextValue,
+                textAlign: widget.textAlign ?? TextAlign.start,
+                autovalidateMode: widget.autoValidateMode,
+                onTap: widget.onTap,
+                controller: widget.controller,
+                keyboardType: widget.keyboardType,
+                textInputAction: widget.textInputAction,
+                obscureText: widget.isPasswordField ? isTextObscured : false,
+                obscuringCharacter: widget.obscuringCharacter ?? "*",
+                readOnly: widget.readOnly,
+                autofocus: false,
+                maxLines: widget.maxLines ?? 1,
+                minLines: widget.minLines ?? 1,
+                validator: widget.validator != null
+                    ? (value) {
+                        final error = widget.validator!(value);
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (mounted) {
                             setState(() {
-                              isTextObscured = !isTextObscured;
+                              hasError = error != null;
+                              errorText = error;
                             });
-                          },
-                        )
-                      : widget.isSuffixIcon && widget.icon != null
-                      ? GestureDetector(
-                          onTap: widget.onSuffixTap,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Image.asset(
-                              widget.icon!,
-                              height: widget.suffixIconHeight ?? 20,
-                              width: widget.suffixIconWidth ?? 20,
-                              fit: BoxFit.contain,
-                              color: const Color(0xff8697AC),
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.error, size: 20),
-                            ),
-                          ),
-                        )
-                      : null,
-                  filled: false,
-                  hintText: widget.hintText,
-                  hint: widget.hint,
-                  contentPadding:
-                      widget.contentPadding ??
-                      const EdgeInsets.symmetric(vertical: 16),
-                  hintStyle:
-                      widget.hintStyle ??
-                      TextStyle(
+                          }
+                        });
+                        return null; // Return null to prevent built-in error display
+                      }
+                    : null,
+                cursorColor: widget.cursorColor ?? theme.colorScheme.primary,
+                decoration:
+                    widget.decoration ??
+                    InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.auto,
+                      labelText: widget.labelText,
+                      labelStyle: TextStyle(
                         fontFamily: 'Poppins',
-                        color:
-                            widget.hintColor ??
-                            (isDarkMode
-                                ? const Color(0xFFAAAAAA)
-                                : const Color(0xFF909090)),
-                        fontSize: widget.hintSize ?? 14,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0,
+                        color: widget.labelColor ?? theme.colorScheme.onSurface,
+                        fontSize: widget.labelSize ?? 20,
+                        fontWeight: FontWeight.normal,
                       ),
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  focusedErrorBorder: InputBorder.none,
-                ),
-            style:
-                widget.inputTextStyle ??
-                TextStyle(
-                  color: widget.textColor ?? theme.colorScheme.onSurface,
-                  fontFamily: "Poppins",
-                  fontSize: widget.textSize ?? 15,
-                  fontWeight: FontWeight.w400,
-                ),
+                      isDense: true,
+                      prefixIcon: widget.prefixIcon != null
+                          ? Icon(widget.prefixIcon, size: widget.prefixIconSize)
+                          : widget.prefixIcon == null &&
+                                widget.icon != null &&
+                                !widget.isSuffixIcon
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              child: Image.asset(
+                                widget.icon!,
+                                height: 20,
+                                width: 20,
+                                fit: BoxFit.contain,
+                                color:
+                                    widget.prefixIconColor ??
+                                    const Color(0xff7B7B7B),
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Icon(Icons.error, size: 20),
+                              ),
+                            )
+                          : null,
+                      prefixIconConstraints:
+                          widget.prefixIconConstraints ??
+                          const BoxConstraints(minWidth: 36, minHeight: 36),
+                      suffixStyle: widget.suffixStyle,
+                      suffixIcon: widget.suffixIcon != null
+                          ? Icon(
+                              widget.suffixIcon,
+                              size: 25,
+                              color: widget.suffixColor,
+                            )
+                          : widget.isPasswordField
+                          ? IconButton(
+                              icon: Icon(
+                                isTextObscured
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                                color:
+                                    widget.passwordIconColor ??
+                                    theme.colorScheme.onSurface,
+                                size: 25,
+                              ),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(
+                                minWidth: 36,
+                                minHeight: 36,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  isTextObscured = !isTextObscured;
+                                });
+                              },
+                            )
+                          : widget.isSuffixIcon && widget.icon != null
+                          ? GestureDetector(
+                              onTap: widget.onSuffixTap,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                child: Image.asset(
+                                  widget.icon!,
+                                  height: widget.suffixIconHeight ?? 20,
+                                  width: widget.suffixIconWidth ?? 20,
+                                  fit: BoxFit.contain,
+                                  color: const Color(0xff8697AC),
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      const Icon(Icons.error, size: 20),
+                                ),
+                              ),
+                            )
+                          : null,
+                      filled: false,
+                      hintText: widget.hintText,
+                      hint: widget.hint,
+                      contentPadding:
+                          widget.contentPadding ??
+                          const EdgeInsets.symmetric(vertical: 16),
+                      hintStyle:
+                          widget.hintStyle ??
+                          TextStyle(
+                            fontFamily: 'Poppins',
+                            color:
+                                widget.hintColor ??
+                                (isDarkMode
+                                    ? const Color(0xFFAAAAAA)
+                                    : const Color(0xFF909090)),
+                            fontSize: widget.hintSize ?? 14,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0,
+                          ),
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                    ),
+                style:
+                    widget.inputTextStyle ??
+                    TextStyle(
+                      color: widget.textColor ?? theme.colorScheme.onSurface,
+                      fontFamily: "Poppins",
+                      fontSize: widget.textSize ?? 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+              ),
+            ),
           ),
-        ),
+          // Custom error text below the input
+          if (hasError && errorText != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4, left: 4),
+              child: Text(
+                errorText!,
+                style: TextStyle(
+                  color: Colors.red[600],
+                  fontSize: 11,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Poppins',
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
